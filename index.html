@@ -358,19 +358,47 @@
     const form = document.getElementById("employeeForm");
     const message = document.getElementById("message");
 
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz1AsxzBL4mW5hWdB-_vMLct8WqZBRj9c3t1dW8vtpX2sLgl9YdW1VaCklQBBhoKXG14g/exec";
+
     form.addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const firstName = document.getElementById("firstName").value;
-        const lastName = document.getElementById("lastName").value;
+        const data = {
+            firstName: document.getElementById("firstName").value,
+            middleName: document.getElementById("middleName").value,
+            lastName: document.getElementById("lastName").value,
+            maritalStatus: document.getElementById("maritalStatus").value,
+            dob: document.getElementById("dob").value,
+            email: document.getElementById("email").value,
+            mobile: document.getElementById("mobile").value,
+            street: document.getElementById("street").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            country: document.getElementById("country").value,
+            zip: document.getElementById("zip").value
+        };
 
-        message.textContent =
-            "Registration submitted successfully! Welcome, "
-            + firstName + " " + lastName + ".";
-
-        message.style.display = "block";
+        fetch(scriptURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(function() {
+            message.textContent =
+                "Registration submitted! Please check with HR to confirm.";
+            message.style.display = "block";
+            form.reset();
+        })
+        .catch(function(error) {
+            message.textContent =
+                "Submission error. Please try again.";
+            message.style.display = "block";
+            console.error(error);
+        });
     });
 </script>
-
 </body>
 </html>
